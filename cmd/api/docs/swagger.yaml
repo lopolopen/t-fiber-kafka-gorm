@@ -1,0 +1,44 @@
+basePath: /
+definitions:
+  dto.Resp:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: user@example.com
+    name: UserName
+  description: This is the Example API documentation.
+  title: Example API
+  version: "1.0"
+paths:
+  /api/v1/users:
+    get:
+      description: Query users by key.
+      parameters:
+      - description: Search key for User name
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.Resp'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: Query users.
+      tags:
+      - User
+swagger: "2.0"
