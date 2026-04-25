@@ -1,6 +1,5 @@
 package tfiberkafkagorm
 
-//todo:
 /*
 	This variable exists solely to ensure the project runs successfully in its initial state.
 	Please delete this file and refactor any code referencing this variable.
