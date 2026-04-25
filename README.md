@@ -1,5 +1,3 @@
-# {{.ModuleName}}
-
 ## This project is generated from template [t-fiber-kafka-gorm](https://github.com/lopolopen/t-fiber-kafka-gorm).
 
 ## 1. Install gonew.
@@ -26,7 +24,7 @@ make dev
 
 * Use make to wire dependency injection
 ```sh
-make sire
+make wire
 ```
 
 * Use make to generate all.

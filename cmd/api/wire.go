@@ -5,6 +5,7 @@ package main
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http"
@@ -17,9 +18,8 @@ import (
 	"github.com/google/wire"
 )
 
-func wireApp(ctx context.Context, c *config.Config, orm conf.ORM) (*fiber.App, error) {
+func wireApp(ctx context.Context, c *config.Config, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	panic(wire.Build(
-		newLogger,
 		repoimpl.ProviderSet,
 		service.ProviderSet,
 		gorm.NewGormDB,

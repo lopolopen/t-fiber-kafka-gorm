@@ -6,9 +6,9 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.12
 	github.com/gofiber/swagger v1.1.1
 	github.com/google/wire v0.7.0
-	github.com/lopolopen/gap v0.1.0-beta.1
-	github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.1
-	github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.1
+	github.com/lopolopen/gap v0.1.0-beta.2
+	github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.2
+	github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.2
 	github.com/lopolopen/shoot v0.7.1
 	github.com/swaggo/swag v1.16.6
 	go.uber.org/automaxprocs v1.6.0
@@ -24,9 +24,7 @@ require (
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/bwmarrin/snowflake v0.3.0 // indirect
-	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
-	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/spec v0.20.4 // indirect
@@ -53,7 +51,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/mod v0.33.0 // indirect
 	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
@@ -70,9 +67,3 @@ tool (
 	github.com/lopolopen/shoot/cmd/shoot
 	github.com/swaggo/swag/cmd/swag
 )
-
-replace github.com/lopolopen/gap => ../../gap
-
-replace github.com/lopolopen/gap/broker/xkafka => ../../gap/broker/xkafka
-
-replace github.com/lopolopen/gap/storage/xgorm => ../../gap/storage/xgorm

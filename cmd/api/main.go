@@ -36,41 +36,43 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
+	logger := newLogger(c.Logger)
+
 	var app *fiber.App
-	app = x.Must(wireApp(ctx, &c, c.ORM))
+	app = x.Must(wireApp(ctx, &c, c.ORM, logger))
 
 	go func() {
 		err := app.Listen(fmt.Sprintf("%s:%d", c.Bind, c.Port))
 		if err != nil {
-			slog.Error("server stop listening with error", slog.Any("err", err))
+			logger.Error("server stop listening with error", slog.Any("err", err))
 		}
 	}()
 
 	<-ctx.Done()
-	slog.Info("shutting down gracefully, press Ctrl+C again to force")
+	logger.Info("shutting down gracefully, press Ctrl+C again to force")
 
 	go func() {
 		sigChan := make(chan os.Signal, 1)
 		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 		<-sigChan
-		slog.Warn("forced shutdown by user, exiting immediately")
+		logger.Warn("forced shutdown by user, exiting immediately")
 		os.Exit(1)
 	}()
 
 	if err := app.ShutdownWithTimeout(5 * time.Second); err != nil {
-		slog.Warn("server shutdown with error", slog.Any("err", err))
+		logger.Warn("server shutdown with error", slog.Any("err", err))
 		os.Exit(1)
 	}
 
-	slog.Info("server shutdown successfully")
+	logger.Info("server shutdown successfully")
 }
 
-func newLogger(c *config.Config) *slog.Logger {
+func newLogger(c config.Logger) *slog.Logger {
 	opts := &slog.HandlerOptions{
-		Level: c.Logger.LogLevel(),
+		Level: c.LogLevel(),
 	}
 	var h slog.Handler
-	if c.Logger.JSON {
+	if c.JSON {
 		h = slog.NewJSONHandler(os.Stdout, opts)
 	} else {
 		h = slog.NewTextHandler(os.Stdout, opts)

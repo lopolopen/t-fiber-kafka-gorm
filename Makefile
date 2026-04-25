@@ -1,4 +1,4 @@
-.PHONY: test swag wire dev
+.PHONY: test swag wire dev gen
 
 comma := ,
 empty :=
@@ -25,6 +25,7 @@ gen:
 	go generate ./...
 
 dev:
+	go mod tidy
 	cd ./cmd/api && go run .
 
 swagdev: swag dev

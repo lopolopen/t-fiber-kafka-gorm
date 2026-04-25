@@ -15,6 +15,7 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/conf"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/gorm"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/gorm/repoimpl"
+	"log/slog"
 )
 
 import (
@@ -24,10 +25,9 @@ import (
 
 // Injectors from wire.go:
 
-func wireApp(ctx context.Context, c *config.Config, orm conf.ORM) (*fiber.App, error) {
+func wireApp(ctx context.Context, c *config.Config, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	db := gorm.NewGormDB(orm)
-	logger := newLogger(c)
-	v := http.NewPub(ctx, c, db, logger)
+	v := http.NewPub(ctx, c, db, log)
 	userRepo := repoimpl.NewUserRepo(db)
 	userSvc := service.NewUserSvc(db, v, userRepo)
 	app := http.NewApp(userSvc, v)
