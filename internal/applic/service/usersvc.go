@@ -27,7 +27,7 @@ func NewUserSvc(db *gorm.DB, pub gap.EventPublisher, quantRepo repo.UserRepo) *U
 	return svc
 }
 
-func (svc *UserSvc) Query(ctx context.Context, q query.QuantQuery) ([]result.User, error) {
+func (svc *UserSvc) Query(ctx context.Context, q query.UserQuery) ([]result.User, error) {
 	users, err := svc.userRepo.Query(ctx, q.Key)
 	if err != nil {
 		return nil, err

@@ -1,5 +1,5 @@
 package query
 
-type QuantQuery struct {
+type UserQuery struct {
 	Key string
 }

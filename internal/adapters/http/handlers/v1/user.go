@@ -22,7 +22,7 @@ func Query(svc *service.UserSvc) fiber.Handler {
 		if key == "" {
 			panic("key is empty")
 		}
-		quants, err := svc.Query(c.Context(), query.QuantQuery{Key: key})
+		quants, err := svc.Query(c.Context(), query.UserQuery{Key: key})
 		if err != nil {
 			return err
 		}

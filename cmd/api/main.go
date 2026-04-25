@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log/slog"
 	"os"
@@ -18,6 +19,8 @@ import (
 	"go.yaml.in/yaml/v3"
 )
 
+var f = flag.String("f", "etc/config.yaml", "config file")
+
 // @title Example API
 // @version 1.0
 // @description This is the Example API documentation.
@@ -26,8 +29,9 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	data := x.Must(os.ReadFile("etc/local.yaml"))
+	flag.Parse()
 
+	data := x.Must(os.ReadFile(*f))
 	var c config.Config
 	if err := yaml.Unmarshal(data, &c); err != nil {
 		panic(err)

@@ -1,4 +1,4 @@
-.PHONY: test swag wire dev gen
+.PHONY: test swag wire dev gen build
 
 comma := ,
 empty :=
@@ -26,6 +26,17 @@ gen:
 
 dev:
 	go mod tidy
-	cd ./cmd/api && go run .
+	cd ./cmd/api && go run . -f etc/local.yaml
 
 swagdev: swag dev
+
+IMAGE_NAME := lopolopen/<app-name>:latest
+DEST_IMAGE := docker://docker.io/$(IMAGE_NAME)
+
+build:
+	-podman manifest rm $(IMAGE_NAME)
+	podman build \
+		--platform linux/amd64,linux/arm64 \
+		--manifest $(IMAGE_NAME) \
+		.
+	podman manifest push $(IMAGE_NAME) $(DEST_IMAGE)
