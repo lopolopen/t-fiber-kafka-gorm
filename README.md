@@ -8,7 +8,7 @@ go install golang.org/x/tools/cmd/gonew@latest
 ## 2. Use this template to create your project.
 ```sh
 mkdir project_name && \
-gonew github.com/lopolopen/t-fiber-kafka-gorm@v0.0.2 github.com/your_name/project_name ./project_name
+gonew github.com/lopolopen/t-fiber-kafka-gorm@v0.0.3 github.com/your_name/project_name ./project_name
 ```
 
 ## 3. Use make.
