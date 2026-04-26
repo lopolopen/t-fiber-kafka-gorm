@@ -1,4 +1,4 @@
-.PHONY: test swag wire dev gen build
+.PHONY: test swag wire run gen build name
 
 comma := ,
 empty :=
@@ -24,19 +24,38 @@ swag:
 gen:
 	go generate ./...
 
-dev:
+env ?= local
+
+run:
 	go mod tidy
-	cd ./cmd/api && go run . -f etc/local.yaml
+	cd ./cmd/api && go run . -f etc/$(env).yaml
 
-swagdev: swag dev
+swagdev: swag run
 
-IMAGE_NAME := lopolopen/<app-name>:latest
-DEST_IMAGE := docker://docker.io/$(IMAGE_NAME)
+
+REGISTRY   := docker.io
+tag        ?= latest
+
+IMAGE_BASE := <org-name>/<app-name>
+IMAGE_FULL := $(IMAGE_BASE):$(tag)
+LATEST_IMG := $(IMAGE_BASE):latest
+
+DEST_VERSION := docker://$(REGISTRY)/$(IMAGE_FULL)
+DEST_LATEST  := docker://$(REGISTRY)/$(LATEST_IMG)
 
 build:
-	-podman manifest rm $(IMAGE_NAME)
+	-podman manifest rm $(IMAGE_BASE):local
 	podman build \
 		--platform linux/amd64,linux/arm64 \
-		--manifest $(IMAGE_NAME) \
+		--manifest $(IMAGE_BASE):local \
 		.
-	podman manifest push $(IMAGE_NAME) $(DEST_IMAGE)
+	podman manifest push $(IMAGE_BASE):local $(DEST_VERSION)
+	@if [ "$(tag)" != "latest" ]; then \
+		echo "Pushing latest tag..."; \
+		podman manifest push $(IMAGE_BASE):local $(DEST_LATEST); \
+	fi
+	podman manifest rm $(IMAGE_BASE):local
+
+name:
+	chmod +x name.sh
+	@./name.sh $(org) $(app)
