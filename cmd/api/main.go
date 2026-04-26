@@ -10,16 +10,18 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/file"
+	"github.com/knadh/koanf/v2"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 	_ "github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/x"
-
-	"github.com/gofiber/fiber/v2"
 	_ "go.uber.org/automaxprocs"
-	"go.yaml.in/yaml/v3"
 )
 
 var f = flag.String("f", "etc/config.yaml", "config file")
+var k = koanf.New(".")
 
 // @title Example API
 // @version 1.0
@@ -31,9 +33,12 @@ var f = flag.String("f", "etc/config.yaml", "config file")
 func main() {
 	flag.Parse()
 
-	data := x.Must(os.ReadFile(*f))
+	if err := k.Load(file.Provider(*f), yaml.Parser()); err != nil {
+		panic(err)
+	}
+
 	var c config.Config
-	if err := yaml.Unmarshal(data, &c); err != nil {
+	if err := k.Unmarshal("", &c); err != nil {
 		panic(err)
 	}
 

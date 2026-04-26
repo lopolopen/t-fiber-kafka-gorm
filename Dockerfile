@@ -24,4 +24,4 @@ WORKDIR /root/
 COPY --from=builder /app/main .
 COPY --from=builder /app/cmd/api/etc ./etc
 
-CMD ["./main","-f","etc/config.yaml"]
+CMD ["./main", "-f", "etc/config.yaml"]
