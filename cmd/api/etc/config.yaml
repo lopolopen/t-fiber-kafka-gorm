@@ -1,6 +1,9 @@
 env: prod
 port: 8080
 bind:
+swagger:
+  host: localhost:8080
+  basePath: /
 logger:
   level: warn
   json: true

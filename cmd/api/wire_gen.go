@@ -9,8 +9,10 @@ package main
 import (
 	"context"
 	"github.com/gofiber/fiber/v2"
+	"github.com/lopolopen/gap/broker/xkafka"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http"
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/outbound/pubs"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/conf"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/gorm"
@@ -25,11 +27,11 @@ import (
 
 // Injectors from wire.go:
 
-func wireApp(ctx context.Context, c *config.Config, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
+func wireApp(ctx context.Context, c *config.Config, k2 xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	db := gorm.NewGormDB(orm)
-	v := http.NewPub(ctx, c, db, log)
+	v := pubs.NewPub(ctx, k2, db, log)
 	userRepo := repoimpl.NewUserRepo(db)
 	userSvc := service.NewUserSvc(db, v, userRepo)
-	app := http.NewApp(userSvc, v)
+	app := http.NewApp(c, userSvc, v)
 	return app, nil
 }

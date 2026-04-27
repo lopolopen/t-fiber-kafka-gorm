@@ -1,11 +1,8 @@
 package http
 
 import (
-	"context"
-	"log/slog"
-
-	tfiberkafkagorm "github.com/lopolopen/t-fiber-kafka-gorm"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
+	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/dto"
 	v1 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/handlers/v1"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
@@ -17,36 +14,12 @@ import (
 	"github.com/gofiber/swagger"
 	"github.com/google/wire"
 	"github.com/lopolopen/gap"
-	"github.com/lopolopen/gap/broker/xkafka"
-	"github.com/lopolopen/gap/storage/xgorm"
-	"gorm.io/gorm"
 )
 
-var ProviderSet = wire.NewSet(NewPub, NewApp)
-
-func NewPub(ctx context.Context, c *config.Config, db *gorm.DB, log *slog.Logger) gap.EventPublisher {
-	if tfiberkafkagorm.HAVE_NOT_BEEN_DELETED_YET {
-		return nil
-	}
-
-	pub := gap.NewEventPublisher(
-		gap.WithDrain(ctx, 5),
-		xgorm.UseGorm(
-			xgorm.DB(db),
-		),
-		xkafka.UseKafka(
-			xkafka.Brokers(c.Kafka.Brokers),
-			xkafka.ConfigTopic(
-			// xkafka.NumPartitions(4),
-			// xkafka.ReplicationFactor(3),
-			),
-		),
-		gap.UseDashboard(),
-	)
-	return pub
-}
+var ProviderSet = wire.NewSet(NewApp)
 
 func NewApp(
+	c *config.Config,
 	userSvc *service.UserSvc,
 	pub gap.EventPublisher,
 ) *fiber.App {
@@ -63,6 +36,10 @@ func NewApp(
 	app.Use(cors.New())
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
+	docs.SwaggerInfo.Host = c.Swagger.Host
+	docs.SwaggerInfo.BasePath = c.Swagger.BasePath
+	docs.SwaggerInfo.Version += "-" + c.Env
+
 	if pub != nil {
 		app.All("/dashboard/*", adaptor.HTTPHandler(gap.NewDashboardHandler(pub)))
 	}

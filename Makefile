@@ -1,8 +1,10 @@
 .PHONY: test swag wire run gen build name
 
-comma := ,
-empty :=
-space := $(empty) $(empty)
+env ?= local
+
+COMMA := ,
+EMPTY :=
+SPACE := $(EMPTY) $(EMPTY)
 
 SWAG_DIRS := ./ \
 ../../internal/adapters/http/handlers/v1 \
@@ -11,8 +13,8 @@ SWAG_DIRS := ./ \
 ../../internal/applic/cmd \
 ../../internal/applic/result
 
-SWAG_DIRS_COMMA := $(subst $(space),,$(foreach d,$(SWAG_DIRS),$(d)$(comma)))
-SWAG_DIRS_COMMA := $(SWAG_DIRS_COMMA:%$(comma)=%)
+SWAG_DIRS_COMMA := $(subst $(SPACE),,$(foreach d,$(SWAG_DIRS),$(d)$(COMMA)))
+SWAG_DIRS_COMMA := $(SWAG_DIRS_COMMA:%$(COMMA)=%)
 
 wire:
 	cd ./cmd/api && go tool wire
@@ -24,14 +26,11 @@ swag:
 gen:
 	go generate ./...
 
-env ?= local
-
 run:
 	go mod tidy
 	cd ./cmd/api && go run . -f etc/$(env).yaml
 
 swagdev: swag run
-
 
 REGISTRY   := docker.io
 tag        ?= latest
@@ -56,6 +55,13 @@ build:
 	fi
 	podman manifest rm $(IMAGE_BASE):local
 
+
+# ===== Can be deleted when the initialization is finished. =====
 name:
+	@if [ -z "$(org)" ] || [ -z "$(app)" ]; then \
+		echo "Usage: make name org=<org-name> app=<app-name>"; \
+		exit 1; \
+	fi
 	chmod +x name.sh
 	@./name.sh $(org) $(app)
+# ===============================================================

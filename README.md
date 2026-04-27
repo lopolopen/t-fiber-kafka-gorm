@@ -34,19 +34,26 @@ make gen
 
 ## 3. Delete file PLEASE_DELETE_ME.go and fix your code.
 
-<br/>
-<br/>
+## 4. Create a new git repository of the command line:
+```sh
+git init
+git add -A
+git commit -m "init commit"
+git branch -M main
+git remote add origin git@github.com:<org-name>/<app-name>.git
+git push -u origin main
+```
 
-# How to use gonew template?
+---
 
-## 1. Install gonew.
+* ## How to use gonew template?
+### 1. Install gonew.
 ```sh
 go install golang.org/x/tools/cmd/gonew@latest
 ```
-
-## 2. Use this template to create your project.
+### 2. Use this template to create your project.
 ```sh
 mkdir <app-name> && \
-gonew github.com/lopolopen/t-fiber-kafka-gorm@v<x.y.z> github.com/<org-name>/<app-name> ./<app-name>
+gonew github.com/lopolopen/t-fiber-kafka-gorm github.com/<org-name>/<app-name> ./<app-name>
 ```
 

@@ -23,10 +23,10 @@ import (
 var f = flag.String("f", "etc/config.yaml", "config file")
 var k = koanf.New(".")
 
-// @title Example API
+// @title <app-name> API
 // @version 1.0
-// @description This is the Example API documentation.
-// @contact.name UserName
+// @description This is the <app-name> API documentation.
+// @contact.name Owner
 // @contact.email user@example.com
 // @host localhost:8080
 // @BasePath /
@@ -48,7 +48,7 @@ func main() {
 	logger := newLogger(c.Logger)
 
 	var app *fiber.App
-	app = x.Must(wireApp(ctx, &c, c.ORM, logger))
+	app = x.Must(wireApp(ctx, &c, c.Kafka, c.ORM, logger))
 
 	go func() {
 		err := app.Listen(fmt.Sprintf("%s:%d", c.Bind, c.Port))

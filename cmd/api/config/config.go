@@ -9,12 +9,13 @@ import (
 )
 
 type Config struct {
-	Env    string         `yaml:"env"`
-	Port   int            `yaml:"port"`
-	Bind   string         `yaml:"bind"`
-	Logger Logger         `yaml:"logger"`
-	ORM    conf.ORM       `yaml:"orm"`
-	Kafka  xkafka.Options `yaml:"kafka"`
+	Env     string         `yaml:"env"`
+	Port    int            `yaml:"port"`
+	Bind    string         `yaml:"bind"`
+	Swagger Swagger        `yaml:"swagger"`
+	Logger  Logger         `yaml:"logger"`
+	ORM     conf.ORM       `yaml:"orm"`
+	Kafka   xkafka.Options `yaml:"kafka"`
 }
 
 type Logger struct {
@@ -36,4 +37,9 @@ func (l Logger) LogLevel() slog.Level {
 		return slog.LevelError + 1
 	}
 	return slog.LevelInfo
+}
+
+type Swagger struct {
+	Host     string `yaml:"host"`
+	BasePath string `yaml:"basePath"`
 }
