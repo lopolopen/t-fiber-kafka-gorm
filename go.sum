@@ -75,8 +75,8 @@ github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.2 h1:rDLLBi49+xD0LGnGRq8C7nb9
 github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.2/go.mod h1:upxfey8s2F4roNRBiov9MT9s4pglYjxwJLKdkkIlPYs=
 github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.2 h1:saFvtljnXdbSJvFmuFc3CsCqhan9nkGqVlZEwc1oo0s=
 github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.2/go.mod h1:+2babLS56B/TEvfWViLe5pj4bK681xBNK+6N59AYMmA=
-github.com/lopolopen/shoot v0.7.1 h1:oOFRa2Z1zjVW2lF9Dwqre3Yxr1FM4NV8ZsC305qA/Jg=
-github.com/lopolopen/shoot v0.7.1/go.mod h1:SeFIk1jt9F1Q4Q8IBst2bAh/LA2ijIFKDU4sBOcbA/g=
+github.com/lopolopen/shoot v0.7.3 h1:m8pVs8iSKVvdCFGH4GoqDbwzG6fOondyOGzxHfdTGDI=
+github.com/lopolopen/shoot v0.7.3/go.mod h1:SeFIk1jt9F1Q4Q8IBst2bAh/LA2ijIFKDU4sBOcbA/g=
 github.com/mailru/easyjson v0.0.0-20190614124828-94de47d64c63/go.mod h1:C1wdFJiN94OJF2b5HbByQZoLdCWB1Yqtg26g4irojpc=
 github.com/mailru/easyjson v0.0.0-20190626092158-b2ccc519800e/go.mod h1:C1wdFJiN94OJF2b5HbByQZoLdCWB1Yqtg26g4irojpc=
 github.com/mailru/easyjson v0.7.6 h1:8yTIVnZgCoiM1TgqoeTl+LfU5Jg6/xL3QhGQnimLYnA=
