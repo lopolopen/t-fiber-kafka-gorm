@@ -31,7 +31,7 @@ func wireApp(ctx context.Context, c *config.Config, k2 xkafka.Options, orm conf.
 	db := gorm.NewGormDB(orm)
 	v := pubs.NewPub(ctx, k2, db, log)
 	userRepo := repoimpl.NewUserRepo(db)
-	userSvc := service.NewUserSvc(db, v, userRepo)
-	app := http.NewApp(c, userSvc, v)
+	userSvc := service.NewUserSvc(log, db, v, userRepo)
+	app := http.NewApp(c, userSvc, v, log)
 	return app, nil
 }

@@ -22,8 +22,8 @@ func (User) TableComment() string {
 	return "用户"
 }
 
-func (q *User) readEntity(*entity.User) {
-	q.CreatedAt = time.Time{}
-	q.UpdatedAt = time.Time{}
-	q.DeletedAt = gorm.DeletedAt{}
+func (u *User) readEntity(*entity.User) {
+	u.CreatedAt = time.Time{}
+	u.UpdatedAt = time.Time{}
+	u.DeletedAt = gorm.DeletedAt{}
 }

@@ -11,7 +11,8 @@ SWAG_DIRS := ./ \
 ../../internal/adapters/http/dto \
 ../../internal/applic/query \
 ../../internal/applic/cmd \
-../../internal/applic/result
+../../internal/applic/result \
+../../internal/domain/enum
 
 SWAG_DIRS_COMMA := $(subst $(SPACE),,$(foreach d,$(SWAG_DIRS),$(d)$(COMMA)))
 SWAG_DIRS_COMMA := $(SWAG_DIRS_COMMA:%$(COMMA)=%)
@@ -25,6 +26,15 @@ swag:
 
 gen:
 	go generate ./...
+
+GOPATH=$(shell go env GOPATH)
+
+proto:
+	protoc --plugin=protoc-gen-go=$(GOPATH)/bin/protoc-gen-go \
+	    --proto_path=. \
+		--go_out=. \
+		--go_opt=paths=source_relative \
+		pkg/schema/*.proto
 
 run:
 	go mod tidy

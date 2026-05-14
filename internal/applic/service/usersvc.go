@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/query"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/result"
@@ -13,13 +14,15 @@ import (
 )
 
 type UserSvc struct {
+	log      *slog.Logger
 	db       *gorm.DB
 	pub      gap.EventPublisher
 	userRepo repo.UserRepo
 }
 
-func NewUserSvc(db *gorm.DB, pub gap.EventPublisher, quantRepo repo.UserRepo) *UserSvc {
+func NewUserSvc(log *slog.Logger, db *gorm.DB, pub gap.EventPublisher, quantRepo repo.UserRepo) *UserSvc {
 	svc := &UserSvc{
+		log:      log.With(slog.String("svc", "UserSvc")),
 		db:       db,
 		pub:      pub,
 		userRepo: quantRepo,

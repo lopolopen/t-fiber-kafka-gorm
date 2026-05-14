@@ -1,32 +1,26 @@
 package dto
 
-type Resp struct {
-	Data any    `json:"data,omitempty"`
-	Code int    `json:"code"`
-	Msg  string `json:"msg,omitempty"`
+import "github.com/lopolopen/pkg/errorx"
+
+type Resp[T any] struct {
+	Data    T      `json:"data,omitempty"`
+	Reason  string `json:"reason,omitempty"`
+	Message string `json:"message,omitempty"`
 }
 
-func Err(err error) Resp {
-	var msg string
-	if err != nil {
-		msg = err.Error()
-	}
-	return Resp{
-		Code: -1,
-		Msg:  msg,
-	}
+func (r *Resp[T]) OK() bool {
+	return r.Reason == ""
 }
 
-func ErrMsg(msg string) Resp {
-	return Resp{
-		Code: -1,
-		Msg:  msg,
+func Err(err *errorx.Error) Resp[struct{}] {
+	return Resp[struct{}]{
+		Reason:  err.Reason,
+		Message: err.Message,
 	}
 }
 
-func OK[T any](data T) Resp {
-	return Resp{
+func OK[T any](data T) Resp[T] {
+	return Resp[T]{
 		Data: data,
-		Code: 0,
 	}
 }

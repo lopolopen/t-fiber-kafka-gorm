@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package schema;
+
+option go_package = "github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema;schema";
+
+enum ErrorReason {
+    UNSPECIFIED = 0;
+
+    INVALID_IDEMPOTENCY_KEY = 401;
+    INVALID_REQUEST_FIELDS = 402;
+    NIL_ARGUMENT = 501;
+}

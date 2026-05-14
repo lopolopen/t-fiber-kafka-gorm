@@ -6,7 +6,7 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/entity"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/repo"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra"
-	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/errx"
+	"github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema/errx"
 	"gorm.io/gorm"
 )
 
@@ -44,35 +44,35 @@ func (r *Base[Tid, T, Te, Tpo]) Exists(ctx context.Context, id Tid) (bool, error
 }
 
 func (r *Base[Tid, T, Te, Tpo]) FindByID(ctx context.Context, id Tid) (Te, error) {
-	var e Te
-	po := r.assembler.ToPO(e)
+	var ent Te
+	po := r.assembler.ToPO(ent)
 	db := r.db.WithContext(ctx).
 		Find(&po, "id = ?", id)
 	if db.Error != nil {
-		return e, db.Error
+		return ent, db.Error
 	}
 	return po.ToEntity(), nil
 }
 
-func (r *Base[Tid, T, Te, Tpo]) Create(ctx context.Context, e Te) (Te, error) {
-	if e == nil {
-		return nil, errx.ErrParamIsNil("e")
+func (r *Base[Tid, T, Te, Tpo]) Create(ctx context.Context, ent Te) (Te, error) {
+	if ent == nil {
+		return nil, errx.ArgumentIsNil("ent")
 	}
-	po := r.assembler.ToPO(e)
+	po := r.assembler.ToPO(ent)
 	err := r.db.WithContext(ctx).
 		Create(po).Error
 	if err != nil {
 		return nil, err
 	}
-	e = r.assembler.ToEntity(po)
-	return e, nil
+	ent = r.assembler.ToEntity(po)
+	return ent, nil
 }
 
-func (r *Base[Tid, T, Te, Tpo]) Save(ctx context.Context, e Te) error {
-	if e == nil {
-		return errx.ErrParamIsNil("e")
+func (r *Base[Tid, T, Te, Tpo]) Save(ctx context.Context, ent Te) error {
+	if ent == nil {
+		return errx.ArgumentIsNil("ent")
 	}
-	po := r.assembler.ToPO(e)
+	po := r.assembler.ToPO(ent)
 	err := r.db.WithContext(ctx).
 		Save(po).Error
 	if err != nil {
