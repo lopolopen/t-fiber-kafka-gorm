@@ -87,8 +87,8 @@ github.com/lopolopen/gap v0.1.0-beta.2 h1:x6wqy5FIaInxxrLjYUq6LDy+Jp9TmNgQzFZ7WE
 github.com/lopolopen/gap v0.1.0-beta.2/go.mod h1:QEPlHGJhtwJ/IYTexO3rg+qdwHHk3/MSFsdB/IOqNlA=
 github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.2 h1:rDLLBi49+xD0LGnGRq8C7nb9RpQ4HT2HlU6SxJoOAXo=
 github.com/lopolopen/gap/broker/xkafka v0.1.0-beta.2/go.mod h1:upxfey8s2F4roNRBiov9MT9s4pglYjxwJLKdkkIlPYs=
-github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.2 h1:saFvtljnXdbSJvFmuFc3CsCqhan9nkGqVlZEwc1oo0s=
-github.com/lopolopen/gap/storage/xgorm v0.1.0-beta.2/go.mod h1:+2babLS56B/TEvfWViLe5pj4bK681xBNK+6N59AYMmA=
+github.com/lopolopen/gap/storage/xgorm v0.1.1-beta.1 h1:MI0Pcq1zxw0Wc4CaG2FlIHQrS+j25G6pThBEhJByLrU=
+github.com/lopolopen/gap/storage/xgorm v0.1.1-beta.1/go.mod h1:+2babLS56B/TEvfWViLe5pj4bK681xBNK+6N59AYMmA=
 github.com/lopolopen/pkg v0.0.1 h1:8iWQxE86TK2CE6QbE5ChNAL/V6WhzII3eq6nzdduLr0=
 github.com/lopolopen/pkg v0.0.1/go.mod h1:+JByXUi+gZcgzNIumP625Hv/keuU55bwNVll+FNDOMQ=
 github.com/lopolopen/shoot v0.7.3 h1:m8pVs8iSKVvdCFGH4GoqDbwzG6fOondyOGzxHfdTGDI=
