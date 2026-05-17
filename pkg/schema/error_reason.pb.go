@@ -25,7 +25,7 @@ type ErrorReason int32
 
 const (
 	ErrorReason_UNSPECIFIED             ErrorReason = 0
-	ErrorReason_FIBER_ERROR             ErrorReason = 1
+	ErrorReason_FRAMEWORK_ERROR         ErrorReason = 1
 	ErrorReason_INVALID_IDEMPOTENCY_KEY ErrorReason = 401
 	ErrorReason_INVALID_REQUEST_FIELDS  ErrorReason = 402
 	ErrorReason_NIL_ARGUMENT            ErrorReason = 501
@@ -35,14 +35,14 @@ const (
 var (
 	ErrorReason_name = map[int32]string{
 		0:   "UNSPECIFIED",
-		1:   "FIBER_ERROR",
+		1:   "FRAMEWORK_ERROR",
 		401: "INVALID_IDEMPOTENCY_KEY",
 		402: "INVALID_REQUEST_FIELDS",
 		501: "NIL_ARGUMENT",
 	}
 	ErrorReason_value = map[string]int32{
 		"UNSPECIFIED":             0,
-		"FIBER_ERROR":             1,
+		"FRAMEWORK_ERROR":         1,
 		"INVALID_IDEMPOTENCY_KEY": 401,
 		"INVALID_REQUEST_FIELDS":  402,
 		"NIL_ARGUMENT":            501,
@@ -80,10 +80,10 @@ var File_pkg_schema_error_reason_proto protoreflect.FileDescriptor
 
 const file_pkg_schema_error_reason_proto_rawDesc = "" +
 	"\n" +
-	"\x1dpkg/schema/error_reason.proto\x12\x06schema*}\n" +
+	"\x1dpkg/schema/error_reason.proto\x12\x06schema*\x81\x01\n" +
 	"\vErrorReason\x12\x0f\n" +
-	"\vUNSPECIFIED\x10\x00\x12\x0f\n" +
-	"\vFIBER_ERROR\x10\x01\x12\x1c\n" +
+	"\vUNSPECIFIED\x10\x00\x12\x13\n" +
+	"\x0fFRAMEWORK_ERROR\x10\x01\x12\x1c\n" +
 	"\x17INVALID_IDEMPOTENCY_KEY\x10\x91\x03\x12\x1b\n" +
 	"\x16INVALID_REQUEST_FIELDS\x10\x92\x03\x12\x11\n" +
 	"\fNIL_ARGUMENT\x10\xf5\x03B;Z9github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema;schemab\x06proto3"

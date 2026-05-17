@@ -6,8 +6,8 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema"
 )
 
-func FiberErr(err *fiber.Error) *errorx.Error {
-	return errorx.New(err.Code, schema.ErrorReason_FIBER_ERROR.String(), err.Message)
+func FrameworkErr(err *fiber.Error) *errorx.Error {
+	return errorx.New(err.Code, schema.ErrorReason_FRAMEWORK_ERROR.String(), err.Message)
 }
 
 func ArgumentIsNil(argName string) *errorx.Error {

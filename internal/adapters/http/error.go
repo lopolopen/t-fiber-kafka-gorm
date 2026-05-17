@@ -15,7 +15,7 @@ func HandlerError(logger *slog.Logger) fiber.ErrorHandler {
 		var err *errorx.Error
 		var fErr *fiber.Error
 		if errors.As(theErr, &fErr) {
-			err = errx.FiberErr(fErr)
+			err = errx.FrameworkErr(fErr)
 		} else if !errors.As(theErr, &err) {
 			err = errx.ErrUnspecified.WithCause(theErr)
 		}

@@ -13,6 +13,7 @@ type Config struct {
 	Port    int            `yaml:"port"`
 	Bind    string         `yaml:"bind"`
 	Timeout int64          `yaml:"timeout"`
+	CORS    CORS           `yaml:"cors"`
 	Swagger Swagger        `yaml:"swagger"`
 	Logger  Logger         `yaml:"logger"`
 	ORM     conf.ORM       `yaml:"orm"`
@@ -21,6 +22,11 @@ type Config struct {
 
 func (c *Config) IsProd() bool {
 	return c.Env == "prod"
+}
+
+type CORS struct {
+	AllowOrigins []string `yaml:"allowOrigins"`
+	AllowHeaders []string `yaml:"allowHeaders"`
 }
 
 type Logger struct {

@@ -2,6 +2,9 @@ env: prod
 port: 8080
 bind:
 timeout: 3000
+cors:
+  allowOrigins:
+    - "*"
 swagger:
   host: localhost:8080
   basePath: /

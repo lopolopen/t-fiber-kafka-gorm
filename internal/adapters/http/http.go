@@ -2,6 +2,7 @@ package http
 
 import (
 	"log/slog"
+	"strings"
 	"time"
 
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
@@ -38,7 +39,14 @@ func NewApp(
 	app.Use(recover.New(recover.Config{
 		EnableStackTrace: !c.IsProd(),
 	}))
-	app.Use(cors.New())
+	corsConf := cors.ConfigDefault
+	if len(c.CORS.AllowOrigins) > 0 {
+		corsConf.AllowOrigins = strings.Join(c.CORS.AllowOrigins, ",")
+	}
+	if len(c.CORS.AllowHeaders) > 0 {
+		corsConf.AllowHeaders = strings.Join(c.CORS.AllowHeaders, ",")
+	}
+	app.Use(cors.New(corsConf))
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	docs.SwaggerInfo.Host = c.Swagger.Host
