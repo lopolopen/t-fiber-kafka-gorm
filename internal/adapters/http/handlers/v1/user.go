@@ -13,8 +13,8 @@ import (
 // @Param			key	query	string	true	"Search key for User name"
 // @Tags			User
 // @Produce		json
-// @Success		200	{object}	dto.Resp
-// @Failure		200	{object}	dto.Resp{data=nil}
+// @Success		200	{object}	dto.Resp[[]result.User]
+// @Failure		200	{object}	dto.Resp[any]
 // @Router			/api/v1/users [get]
 func QueryUsers(svc *service.UserSvc) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -22,7 +22,7 @@ func QueryUsers(svc *service.UserSvc) fiber.Handler {
 		if key == "" {
 			panic("key is empty")
 		}
-		users, err := svc.Query(c.Context(), query.UserQuery{Key: key})
+		users, err := svc.Query(c.UserContext(), query.UserQuery{Key: key})
 		if err != nil {
 			return err
 		}

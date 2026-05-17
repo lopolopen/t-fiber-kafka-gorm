@@ -10,7 +10,7 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "UserName",
+            "name": "Owner",
             "email": "user@example.com"
         },
         "version": "{{.Version}}"
@@ -41,19 +41,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/dto.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/dto.Resp-any"
                         }
                     }
                 }
@@ -61,14 +49,49 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.Resp": {
+        "dto.Resp-any": {
             "type": "object",
             "properties": {
-                "code": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Resp-array_result_User": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/result.User"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "result.User": {
+            "type": "object",
+            "properties": {
+                "age": {
                     "type": "integer"
                 },
-                "data": {},
-                "msg": {
+                "birthday": {
+                    "type": "string",
+                    "example": "1987-11-29"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -82,8 +105,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Example API",
-	Description:      "This is the Example API documentation.",
+	Title:            "<app-name> API",
+	Description:      "This is the <app-name> API documentation.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

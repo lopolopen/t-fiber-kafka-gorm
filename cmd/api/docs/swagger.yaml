@@ -1,20 +1,43 @@
 basePath: /
 definitions:
-  dto.Resp:
+  dto.Resp-any:
     properties:
-      code:
-        type: integer
       data: {}
-      msg:
+      message:
+        type: string
+      reason:
+        type: string
+    type: object
+  dto.Resp-array_result_User:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/result.User'
+        type: array
+      message:
+        type: string
+      reason:
+        type: string
+    type: object
+  result.User:
+    properties:
+      age:
+        type: integer
+      birthday:
+        example: "1987-11-29"
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
 host: localhost:8080
 info:
   contact:
     email: user@example.com
-    name: UserName
-  description: This is the Example API documentation.
-  title: Example API
+    name: Owner
+  description: This is the <app-name> API documentation.
+  title: <app-name> API
   version: "1.0"
 paths:
   /api/v1/users:
@@ -32,12 +55,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/dto.Resp'
-            - properties:
-                data:
-                  type: object
-              type: object
+            $ref: '#/definitions/dto.Resp-any'
       summary: Query users.
       tags:
       - User

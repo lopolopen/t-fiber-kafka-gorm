@@ -45,5 +45,13 @@ func (Mapper) DateTimeToTime(dt timex.DateTime) time.Time {
 }
 
 func (Mapper) TimeToDateTime(t time.Time) timex.DateTime {
-	return timex.DateTime{Time: t}
+	return timex.TimeToDateTime(t)
+}
+
+func (Mapper) DateToTime(d timex.Date) time.Time {
+	return d.Time
+}
+
+func (Mapper) TimeToDate(t time.Time) timex.Date {
+	return timex.TimeToDate(t)
 }

@@ -46,13 +46,13 @@ func (dt *DateTime) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func Now() DateTime {
+func NowDateTime() DateTime {
 	return DateTime{
 		Time: time.Now().Truncate(time.Second),
 	}
 }
 
-func FromTime(t time.Time) DateTime {
+func TimeToDateTime(t time.Time) DateTime {
 	return DateTime{
 		Time: t.Truncate(time.Second),
 	}

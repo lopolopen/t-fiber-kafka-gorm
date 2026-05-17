@@ -42,7 +42,7 @@ func (q *UserRepo) Query(ctx context.Context, key string) ([]*entity.User, error
 				CreatedAt: time.Now(),
 				UpdatedAt: time.Now(),
 			},
-			Name:     "Tome",
+			Name:     "Tom",
 			Gender:   enum.GenderMale,
 			Birthday: time.Date(1987, 11, 29, 0, 0, 0, 0, time.Local),
 		},

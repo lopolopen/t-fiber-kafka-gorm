@@ -12,10 +12,15 @@ type Config struct {
 	Env     string         `yaml:"env"`
 	Port    int            `yaml:"port"`
 	Bind    string         `yaml:"bind"`
+	Timeout int64          `yaml:"timeout"`
 	Swagger Swagger        `yaml:"swagger"`
 	Logger  Logger         `yaml:"logger"`
 	ORM     conf.ORM       `yaml:"orm"`
 	Kafka   xkafka.Options `yaml:"kafka"`
+}
+
+func (c *Config) IsProd() bool {
+	return c.Env == "prod"
 }
 
 type Logger struct {

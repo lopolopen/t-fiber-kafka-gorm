@@ -6,6 +6,7 @@ option go_package = "github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema;schema";
 
 enum ErrorReason {
     UNSPECIFIED = 0;
+    FIBER_ERROR = 1;
 
     INVALID_IDEMPOTENCY_KEY = 401;
     INVALID_REQUEST_FIELDS = 402;

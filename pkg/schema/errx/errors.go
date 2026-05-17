@@ -1,15 +1,22 @@
 package errx
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"github.com/lopolopen/pkg/errorx"
 	"github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema"
 )
 
-func ArgumentIsNil(argName string) error {
+func FiberErr(err *fiber.Error) *errorx.Error {
+	return errorx.New(err.Code, schema.ErrorReason_FIBER_ERROR.String(), err.Message)
+}
+
+func ArgumentIsNil(argName string) *errorx.Error {
 	return ErrNilArgument.WithMetadata(map[string]string{
 		"argumentName": argName,
 	})
 }
+
+var ErrUnspecified = errorx.InternalServer(schema.ErrorReason_UNSPECIFIED.String(), "")
 
 var ErrInvalidIdempotencyKey = errorx.BadRequest(schema.ErrorReason_INVALID_IDEMPOTENCY_KEY.String(), "invalid idempotency key")
 var ErrInvalidRequestFields = errorx.BadRequest(schema.ErrorReason_INVALID_REQUEST_FIELDS.String(), "invalid request fields")

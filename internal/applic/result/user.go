@@ -10,12 +10,11 @@ import (
 //go:generate go tool shoot map -path=../../domain/entity -way=<-  -file=$GOFILE -i
 
 type User struct {
-	infra.Mapper
-
-	ID       uint
-	Name     string
-	Birthday timex.DateTime
-	Age      int
+	infra.Mapper `json:"-"`
+	ID           uint
+	Name         string
+	Birthday     timex.Date `swaggertype:"string" example:"1987-11-29"`
+	Age          int
 }
 
 func (q *User) readEntity(e *entity.User) {

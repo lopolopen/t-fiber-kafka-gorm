@@ -1,6 +1,7 @@
 env: prod
 port: 8080
 bind:
+timeout: 3000
 swagger:
   host: localhost:8080
   basePath: /

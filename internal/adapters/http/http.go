@@ -1,16 +1,13 @@
 package http
 
 import (
-	"errors"
 	"log/slog"
+	"time"
 
-	"github.com/lopolopen/pkg/errorx"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
-	"github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/dto"
 	v1 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/handlers/v1"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
-	"github.com/lopolopen/t-fiber-kafka-gorm/pkg/schema"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
@@ -30,29 +27,17 @@ func NewApp(
 	logger *slog.Logger,
 ) *fiber.App {
 	app := fiber.New(fiber.Config{
-		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			var e *errorx.Error
-			if !errors.As(err, &e) {
-				code := fiber.StatusInternalServerError
-				reason := schema.ErrorReason_UNSPECIFIED.String()
-				msg := err.Error()
-
-				var fe *fiber.Error
-				if errors.As(err, &fe) {
-					code = fe.Code
-					msg = fe.Message
-				}
-				e = errorx.New(code, reason, msg)
-			}
-			if e.Code >= 500 {
-				logger.Error(err.Error())
-			} else {
-				logger.Debug(err.Error())
-			}
-			return c.Status(int(e.Code)).JSON(dto.Err(e))
-		},
+		ErrorHandler: HandlerError(logger),
+		BodyLimit:    4 * 1024 * 1024,
 	})
-	app.Use(recover.New())
+	if c.IsProd() && c.Timeout > 0 {
+		app.Use(Timeout(func(c *fiber.Ctx) error {
+			return c.Next()
+		}, time.Duration(c.Timeout)*time.Millisecond))
+	}
+	app.Use(recover.New(recover.Config{
+		EnableStackTrace: !c.IsProd(),
+	}))
 	app.Use(cors.New())
 
 	app.Get("/swagger/*", swagger.HandlerDefault)

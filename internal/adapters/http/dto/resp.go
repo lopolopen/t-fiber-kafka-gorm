@@ -3,19 +3,23 @@ package dto
 import "github.com/lopolopen/pkg/errorx"
 
 type Resp[T any] struct {
-	Data    T      `json:"data,omitempty"`
-	Reason  string `json:"reason,omitempty"`
-	Message string `json:"message,omitempty"`
+	Data     T                 `json:"data,omitempty"`
+	Reason   string            `json:"reason,omitempty"`
+	Message  string            `json:"message,omitempty"`
+	Error    string            `json:"error,omitempty"`
+	Metadata map[string]string `json:"metadata,omitempty"`
 }
 
-func (r *Resp[T]) OK() bool {
-	return r.Reason == ""
-}
-
-func Err(err *errorx.Error) Resp[struct{}] {
-	return Resp[struct{}]{
-		Reason:  err.Reason,
-		Message: err.Message,
+func Err(err *errorx.Error) Resp[any] {
+	var cause string
+	if err := err.Unwrap(); err != nil {
+		cause = err.Error()
+	}
+	return Resp[any]{
+		Reason:   err.Reason,
+		Message:  err.Message,
+		Metadata: err.Metadata,
+		Error:    cause,
 	}
 }
 
