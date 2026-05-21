@@ -3,21 +3,22 @@ package config
 import (
 	"log/slog"
 
-	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/conf"
-
 	"github.com/lopolopen/gap/broker/xkafka"
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/conf"
 )
 
 type Config struct {
-	Env     string         `yaml:"env"`
-	Port    int            `yaml:"port"`
-	Bind    string         `yaml:"bind"`
-	Timeout int64          `yaml:"timeout"`
-	CORS    CORS           `yaml:"cors"`
-	Swagger Swagger        `yaml:"swagger"`
-	Logger  Logger         `yaml:"logger"`
-	ORM     conf.ORM       `yaml:"orm"`
-	Kafka   xkafka.Options `yaml:"kafka"`
+	CommitSHA string         `koanf:"commit_sha"`
+	Env       string         `yaml:"env"`
+	Port      int            `yaml:"port"`
+	Bind      string         `yaml:"bind"`
+	Timeout   int64          `yaml:"timeout"`
+	CORS      CORS           `yaml:"cors"`
+	Swagger   Swagger        `yaml:"swagger"`
+	Gap       Gap            `yaml:"gap"`
+	Logger    Logger         `yaml:"logger"`
+	ORM       conf.ORM       `yaml:"orm"`
+	Kafka     xkafka.Options `yaml:"kafka"`
 }
 
 func (c *Config) IsProd() bool {
@@ -53,4 +54,8 @@ func (l Logger) LogLevel() slog.Level {
 type Swagger struct {
 	Host     string `yaml:"host"`
 	BasePath string `yaml:"basePath"`
+}
+
+type Gap struct {
+	Location string `yaml:"location"`
 }

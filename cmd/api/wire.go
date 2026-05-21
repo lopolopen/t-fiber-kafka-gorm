@@ -20,7 +20,7 @@ import (
 	"github.com/google/wire"
 )
 
-func wireApp(ctx context.Context, c *config.Config, k xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
+func wireApp(ctx context.Context, c *config.Config, g config.Gap, k xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	panic(wire.Build(
 		repoimpl.ProviderSet,
 		service.ProviderSet,

@@ -27,9 +27,9 @@ import (
 
 // Injectors from wire.go:
 
-func wireApp(ctx context.Context, c *config.Config, k2 xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
+func wireApp(ctx context.Context, c *config.Config, g config.Gap, k2 xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	db := gorm.NewGormDB(orm)
-	v := pubs.NewPub(ctx, k2, db, log)
+	v := pubs.NewPub(ctx, g, k2, db, log)
 	userRepo := repoimpl.NewUserRepo(db)
 	userSvc := service.NewUserSvc(log, db, v, userRepo)
 	app := http.NewApp(c, userSvc, v, log)

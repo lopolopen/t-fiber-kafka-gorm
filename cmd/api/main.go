@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/knadh/koanf/parsers/yaml"
+	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/v2"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
@@ -37,6 +39,12 @@ func main() {
 		panic(err)
 	}
 
+	if err := k.Load(env.Provider("", ".", func(key string) string {
+		return key
+	}), nil); err != nil {
+		panic(err)
+	}
+
 	var c config.Config
 	if err := k.Unmarshal("", &c); err != nil {
 		panic(err)
@@ -46,9 +54,12 @@ func main() {
 	defer stop()
 
 	logger := newLogger(c.Logger)
+	if !c.IsProd() {
+		fmt.Printf("%s\n", x.Must(json.MarshalIndent(c, "", "\t")))
+	}
 
 	var app *fiber.App
-	app = x.Must(wireApp(ctx, &c, c.Kafka, c.ORM, logger))
+	app = x.Must(wireApp(ctx, &c, c.Gap, c.Kafka, c.ORM, logger))
 
 	go func() {
 		err := app.Listen(fmt.Sprintf("%s:%d", c.Bind, c.Port))
@@ -87,5 +98,6 @@ func newLogger(c config.Logger) *slog.Logger {
 		h = slog.NewTextHandler(os.Stdout, opts)
 	}
 	logger := slog.New(h)
+	slog.SetDefault(logger)
 	return logger
 }

@@ -6,14 +6,17 @@ import (
 
 	"github.com/lopolopen/gap"
 	"github.com/lopolopen/gap/broker/xkafka"
+	"github.com/lopolopen/gap/dashboard"
 	"github.com/lopolopen/gap/storage/xgorm"
 	tfiberkafkagorm "github.com/lopolopen/t-fiber-kafka-gorm"
+	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 
 	"gorm.io/gorm"
 )
 
 func NewPub(
 	ctx context.Context,
+	g config.Gap,
 	k xkafka.Options,
 	db *gorm.DB,
 	log *slog.Logger,
@@ -34,7 +37,9 @@ func NewPub(
 			// xkafka.ReplicationFactor(3),
 			),
 		),
-		gap.UseDashboard(),
+		gap.UseDashboard(
+			dashboard.LocationPath(g.Location),
+		),
 	)
 	return pub
 }

@@ -1,6 +1,11 @@
 .PHONY: test swag wire run gen build name
 
-env ?= local
+APP_NAME		:= <app-name>
+ORG_NAME		:= <org-name>
+IMAGE_BASE 		:= ${ORG_NAME}/${APP_NAME}
+REGISTRY   		:= docker.io
+CONTAINER_TOOL	:= docker
+GIT_SHORT_SHA 	:= $(shell git describe --always --dirty 2>/dev/null || echo "unknown")
 
 COMMA := ,
 EMPTY :=
@@ -36,35 +41,25 @@ proto:
 		--go_opt=paths=source_relative \
 		pkg/schema/*.proto
 
+env ?= local
+
 run:
 	go mod tidy
-	cd ./cmd/api && go run . -f etc/$(env).yaml
+	cd ./cmd/api && COMMIT_SHA=${GIT_SHORT_SHA}  go run . -f etc/$(env).yaml
 
-swagdev: swag run
-
-REGISTRY   := docker.io
-tag        ?= latest
-
-IMAGE_BASE := <org-name>/<app-name>
-IMAGE_FULL := $(IMAGE_BASE):$(tag)
-LATEST_IMG := $(IMAGE_BASE):latest
-
-DEST_VERSION := docker://$(REGISTRY)/$(IMAGE_FULL)
-DEST_LATEST  := docker://$(REGISTRY)/$(LATEST_IMG)
+tag 		?= ${GIT_SHORT_SHA}
+IMAGE_FULL 	:= $(REGISTRY)/$(IMAGE_BASE):$(tag)
+IMAGE_URL 	:= docker://$(IMAGE_FULL)
 
 build:
-	-podman manifest rm $(IMAGE_BASE):local
-	podman build \
-		--platform linux/amd64,linux/arm64 \
-		--manifest $(IMAGE_BASE):local \
+	${CONTAINER_TOOL} build \
+		--build-arg COMMIT_SHA=${GIT_SHORT_SHA} \
+		--platform linux/amd64 \
+		--tag ${IMAGE_FULL} \
 		.
-	podman manifest push $(IMAGE_BASE):local $(DEST_VERSION)
-	@if [ "$(tag)" != "latest" ]; then \
-		echo "Pushing latest tag..."; \
-		podman manifest push $(IMAGE_BASE):local $(DEST_LATEST); \
-	fi
-	podman manifest rm $(IMAGE_BASE):local
 
+push:
+	${CONTAINER_TOOL} push $(IMAGE_FULL) $(IMAGE_URL)
 
 # ===== Can be deleted when the initialization is finished. =====
 name:
