@@ -22,6 +22,7 @@ import (
 var ProviderSet = wire.NewSet(NewApp)
 
 func NewApp(
+	e *config.Env,
 	c *config.Config,
 	userSvc *service.UserSvc,
 	pub gap.EventPublisher,
@@ -31,13 +32,13 @@ func NewApp(
 		ErrorHandler: HandlerError(logger),
 		BodyLimit:    4 * 1024 * 1024,
 	})
-	if c.IsProd() && c.Timeout > 0 {
+	if e.IsProd() && c.Timeout > 0 {
 		app.Use(Timeout(func(c *fiber.Ctx) error {
 			return c.Next()
 		}, time.Duration(c.Timeout)*time.Millisecond))
 	}
 	app.Use(recover.New(recover.Config{
-		EnableStackTrace: !c.IsProd(),
+		EnableStackTrace: !e.IsProd(),
 	}))
 	corsConf := cors.ConfigDefault
 	if len(c.CORS.AllowOrigins) > 0 {
@@ -51,7 +52,10 @@ func NewApp(
 	app.Get("/swagger/*", swagger.HandlerDefault)
 	docs.SwaggerInfo.Host = c.Swagger.Host
 	docs.SwaggerInfo.BasePath = c.Swagger.BasePath
-	docs.SwaggerInfo.Version += "-" + c.Env
+	docs.SwaggerInfo.Title += "-" + e.Name
+	if e.CommitSHA != "" {
+		docs.SwaggerInfo.Version += "-" + e.CommitSHA
+	}
 
 	if pub != nil {
 		app.All("/dashboard/*", adaptor.HTTPHandler(gap.NewDashboardHandler(pub)))

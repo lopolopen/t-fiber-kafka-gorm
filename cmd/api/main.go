@@ -8,22 +8,20 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/env"
-	"github.com/knadh/koanf/providers/file"
-	"github.com/knadh/koanf/v2"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
 	_ "github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/confx"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/x"
 	_ "go.uber.org/automaxprocs"
 )
 
+var commitSHA string
 var f = flag.String("f", "etc/config.yaml", "config file")
-var k = koanf.New(".")
 
 // @title <app-name> API
 // @version 1.0
@@ -35,31 +33,29 @@ var k = koanf.New(".")
 func main() {
 	flag.Parse()
 
-	if err := k.Load(file.Provider(*f), yaml.Parser()); err != nil {
-		panic(err)
+	env := config.Env{
+		Name:      os.Getenv("APP_ENV"),
+		CommitSHA: commitSHA,
 	}
-
-	if err := k.Load(env.Provider("", ".", func(key string) string {
-		return key
-	}), nil); err != nil {
-		panic(err)
+	if env.Name == "" {
+		env.Name = "prod"
 	}
 
 	var c config.Config
-	if err := k.Unmarshal("", &c); err != nil {
-		panic(err)
+	confx.MustLoad(env.Name, *f, &c)
+
+	if !env.IsProd() {
+		cjson, _ := json.MarshalIndent(c, "", strings.Repeat(" ", 4))
+		fmt.Printf("config of %s: %s\n", env.Name, string(cjson))
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
 	logger := newLogger(c.Logger)
-	if !c.IsProd() {
-		fmt.Printf("%s\n", x.Must(json.MarshalIndent(c, "", "\t")))
-	}
 
 	var app *fiber.App
-	app = x.Must(wireApp(ctx, &c, c.Gap, c.Kafka, c.ORM, logger))
+	app = x.Must(wireApp(ctx, &env, &c, c.Gap, c.Kafka, c.ORM, logger))
 
 	go func() {
 		err := app.Listen(fmt.Sprintf("%s:%d", c.Bind, c.Port))

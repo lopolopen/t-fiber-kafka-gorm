@@ -6,13 +6,14 @@ import (
 
 type MySQL struct {
 	DSN          string `yaml:"dsn"`
-	MaxIdleConns int    `yaml:"maxIdleConns"`
-	MaxOpenConns int    `yaml:"maxOpenConns"`
+	MaxIdleConns int    `yaml:"max_idle_conns"`
+	MaxOpenConns int    `yaml:"max_open_conns"`
 }
 
 type ORM struct {
-	MySQL MySQL  `yaml:"mysql"`
-	Level string `yaml:"logLevel"`
+	AutoMigrate bool   `yaml:"auto_migrate"`
+	MySQL       MySQL  `yaml:"mysql"`
+	Level       string `yaml:"log_level"`
 }
 
 func (c ORM) GORMLogLevel() logger.LogLevel {

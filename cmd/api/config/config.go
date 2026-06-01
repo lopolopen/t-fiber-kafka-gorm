@@ -7,27 +7,31 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/conf"
 )
 
-type Config struct {
-	CommitSHA string         `koanf:"commit_sha"`
-	Env       string         `yaml:"env"`
-	Port      int            `yaml:"port"`
-	Bind      string         `yaml:"bind"`
-	Timeout   int64          `yaml:"timeout"`
-	CORS      CORS           `yaml:"cors"`
-	Swagger   Swagger        `yaml:"swagger"`
-	Gap       Gap            `yaml:"gap"`
-	Logger    Logger         `yaml:"logger"`
-	ORM       conf.ORM       `yaml:"orm"`
-	Kafka     xkafka.Options `yaml:"kafka"`
+type Env struct {
+	Name      string
+	CommitSHA string
+	Version   string
 }
 
-func (c *Config) IsProd() bool {
-	return c.Env == "prod"
+func (e *Env) IsProd() bool {
+	return e.Name == "prod"
+}
+
+type Config struct {
+	Port    int            `yaml:"port"`
+	Bind    string         `yaml:"bind"`
+	Timeout int64          `yaml:"timeout"`
+	CORS    CORS           `yaml:"cors"`
+	Swagger Swagger        `yaml:"swagger"`
+	Gap     Gap            `yaml:"gap"`
+	Logger  Logger         `yaml:"logger"`
+	ORM     conf.ORM       `yaml:"orm"`
+	Kafka   xkafka.Options `yaml:"kafka"`
 }
 
 type CORS struct {
-	AllowOrigins []string `yaml:"allowOrigins"`
-	AllowHeaders []string `yaml:"allowHeaders"`
+	AllowOrigins []string `yaml:"allow_origins"`
+	AllowHeaders []string `yaml:"allow_headers"`
 }
 
 type Logger struct {
@@ -53,7 +57,7 @@ func (l Logger) LogLevel() slog.Level {
 
 type Swagger struct {
 	Host     string `yaml:"host"`
-	BasePath string `yaml:"basePath"`
+	BasePath string `yaml:"base_path"`
 }
 
 type Gap struct {

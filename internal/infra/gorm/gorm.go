@@ -38,9 +38,11 @@ func NewGormDB(c conf.ORM) *gorm.DB {
 	sqlDB.SetMaxIdleConns(c.MySQL.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(c.MySQL.MaxOpenConns)
 
-	err = migrate.RunMigrate(db)
-	if err != nil {
-		panic(fmt.Errorf("failed to migrate: %s", err))
+	if c.AutoMigrate {
+		err := migrate.RunMigrate(db)
+		if err != nil {
+			panic(fmt.Errorf("failed to migrate: %s", err))
+		}
 	}
 	return db
 }

@@ -1,22 +1,22 @@
-env: prod
 port: 8080
-bind:
+bind: 127.0.0.1
 timeout: 3000
 cors:
-  allowOrigins:
+  allow_origins:
     - "*"
 swagger:
   host: localhost:8080
-  basePath: /
+  base_Path: /
 logger:
   level: warn
   json: true
 orm:
-  logLevel: off
+  auto_migrate: false
+  log_level: off
   mysql:
-    dsn: <usr>:<password>@tcp(127.0.0.1:3306)/<db>?charset=utf8mb4&parseTime=True&loc=Local
-    maxIdleConns: 20
-    maxOpenConns: 200
+    dsn:
+    max_idle_conns: 20
+    max_open_conns: 200
 kafka:
   brokers: 
     - 127.0.0.1:9092

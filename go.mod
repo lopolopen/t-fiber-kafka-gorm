@@ -2,6 +2,14 @@ module github.com/lopolopen/t-fiber-kafka-gorm
 
 go 1.25.0
 
+tool (
+	github.com/google/wire/cmd/wire
+	github.com/lopolopen/gap/cmd/gapc
+	github.com/lopolopen/shoot/cmd/shoot
+	github.com/swaggo/swag/cmd/swag
+	google.golang.org/protobuf/cmd/protoc-gen-go
+)
+
 require (
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/gofiber/fiber/v2 v2.52.12
@@ -31,6 +39,7 @@ require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
@@ -57,7 +66,7 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/pierrec/lz4/v4 v4.1.26 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
@@ -81,12 +90,4 @@ require (
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
-)
-
-tool (
-	github.com/google/wire/cmd/wire
-	github.com/lopolopen/gap/cmd/gapc
-	github.com/lopolopen/shoot/cmd/shoot
-	github.com/swaggo/swag/cmd/swag
-	google.golang.org/protobuf/cmd/protoc-gen-go
 )

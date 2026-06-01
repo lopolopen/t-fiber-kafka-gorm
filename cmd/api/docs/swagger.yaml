@@ -3,8 +3,14 @@ definitions:
   dto.Resp-any:
     properties:
       data: {}
+      error:
+        type: string
       message:
         type: string
+      metadata:
+        additionalProperties:
+          type: string
+        type: object
       reason:
         type: string
     type: object
@@ -14,8 +20,14 @@ definitions:
         items:
           $ref: '#/definitions/result.User'
         type: array
+      error:
+        type: string
       message:
         type: string
+      metadata:
+        additionalProperties:
+          type: string
+        type: object
       reason:
         type: string
     type: object

@@ -53,8 +53,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "data": {},
+                "error": {
+                    "type": "string"
+                },
                 "message": {
                     "type": "string"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "reason": {
                     "type": "string"
@@ -70,8 +79,17 @@ const docTemplate = `{
                         "$ref": "#/definitions/result.User"
                     }
                 },
+                "error": {
+                    "type": "string"
+                },
                 "message": {
                     "type": "string"
+                },
+                "metadata": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "reason": {
                     "type": "string"
