@@ -30,7 +30,7 @@ import (
 func wireApp(ctx context.Context, e *config.Env, c *config.Config, g config.Gap, k xkafka.Options, orm conf.ORM, log *slog.Logger) (*fiber.App, error) {
 	db := gorm.NewGormDB(orm)
 	v := pubs.NewPub(ctx, g, k, db, log)
-	userRepo := repoimpl.NewUserRepo(db)
+	userRepo := repoimpl.NewUserRepo(log, db)
 	userSvc := service.NewUserSvc(log, db, v, userRepo)
 	app := http.NewApp(e, c, userSvc, v, log)
 	return app, nil

@@ -3,6 +3,7 @@ package repoimpl
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"strings"
 	"time"
 
@@ -10,31 +11,33 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/enum"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/repo"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/infra/gorm/po"
-
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/x"
 	"gorm.io/gorm"
 )
 
 type UserRepo struct {
 	*Base[uint, entity.User, *entity.User, *po.User]
+	logger *slog.Logger
 }
 
-func (q *UserRepo) Bind(txer repo.Txer) (repo.UserRepo, error) {
+func (r *UserRepo) Bind(txer repo.Txer) (repo.UserRepo, error) {
 	db, ok := txer.Tx().(*gorm.DB)
 	if !ok {
 		return nil, errors.New("invalid gorm transaction")
 	}
-	return NewUserRepo(db), nil
+	return NewUserRepo(r.logger, db), nil
 }
 
-func NewUserRepo(db *gorm.DB) *UserRepo {
+func NewUserRepo(logger *slog.Logger, db *gorm.DB) *UserRepo {
 	r := &UserRepo{
-		Base: NewBase[uint, entity.User, *entity.User, *po.User](db),
+		Base:   NewBase[uint, entity.User, *entity.User, *po.User](db),
+		logger: x.SLogWithin(logger, &UserRepo{}),
 	}
 	var _ repo.UserRepo = r
 	return r
 }
 
-func (q *UserRepo) Query(ctx context.Context, key string) ([]*entity.User, error) {
+func (r *UserRepo) Query(ctx context.Context, key string) ([]*entity.User, error) {
 	userPool := []*po.User{
 		{
 			Model: gorm.Model{

@@ -8,21 +8,22 @@ import (
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/result"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/event"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/domain/repo"
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/x"
 
 	"github.com/lopolopen/gap"
 	"gorm.io/gorm"
 )
 
 type UserSvc struct {
-	log      *slog.Logger
+	logger   *slog.Logger
 	db       *gorm.DB
 	pub      gap.EventPublisher
 	userRepo repo.UserRepo
 }
 
-func NewUserSvc(log *slog.Logger, db *gorm.DB, pub gap.EventPublisher, quantRepo repo.UserRepo) *UserSvc {
+func NewUserSvc(logger *slog.Logger, db *gorm.DB, pub gap.EventPublisher, quantRepo repo.UserRepo) *UserSvc {
 	svc := &UserSvc{
-		log:      log.With(slog.String("svc", "UserSvc")),
+		logger:   x.SLogWithin(logger, &UserSvc{}),
 		db:       db,
 		pub:      pub,
 		userRepo: quantRepo,

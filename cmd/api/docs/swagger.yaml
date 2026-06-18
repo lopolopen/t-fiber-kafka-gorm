@@ -71,4 +71,23 @@ paths:
       summary: Query users.
       tags:
       - User
+  /api/v1/users/unsafe-timeout:
+    get:
+      description: Query users by key.
+      parameters:
+      - description: Search key for User name
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Resp-any'
+      summary: Query users. (Unsafe Timeout Demo)
+      tags:
+      - User
 swagger: "2.0"

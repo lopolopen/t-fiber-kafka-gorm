@@ -5,15 +5,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
-	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
-	v1 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/handlers/v1"
-	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
+	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
+	v1 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/handlers/v1"
+	tout "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/timeout"
+	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
+
+	"github.com/gofiber/fiber/v2/middleware/timeout"
 	"github.com/gofiber/swagger"
 	"github.com/google/wire"
 	"github.com/lopolopen/gap"
@@ -32,8 +34,8 @@ func NewApp(
 		ErrorHandler: HandlerError(logger),
 		BodyLimit:    4 * 1024 * 1024,
 	})
-	if e.IsProd() && c.Timeout > 0 {
-		app.Use(Timeout(func(c *fiber.Ctx) error {
+	if !e.IsProd() && c.Timeout > 0 {
+		app.Use(timeout.NewWithContext(func(c *fiber.Ctx) error {
 			return c.Next()
 		}, time.Duration(c.Timeout)*time.Millisecond))
 	}
@@ -65,6 +67,7 @@ func NewApp(
 
 	users := apiv1.Group("/users")
 	users.Get("", v1.QueryUsers(userSvc))
+	users.Get("unsafe-timeout", tout.UnsafeTimeout(v1.QueryUsersWithUnsafeTimeout(userSvc), 1*time.Second))
 
 	if pub != nil {
 		gap.Subscribe(

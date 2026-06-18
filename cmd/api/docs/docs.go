@@ -46,6 +46,35 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/users/unsafe-timeout": {
+            "get": {
+                "description": "Query users by key.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Query users. (Unsafe Timeout Demo)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search key for User name",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Resp-any"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
