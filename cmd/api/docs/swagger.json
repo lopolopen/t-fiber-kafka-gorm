@@ -1,8 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the \u003capp-name\u003e API documentation.",
-        "title": "\u003capp-name\u003e API",
+        "title": "\u003capp-name\u003e-\u003corg-name\u003e API",
         "contact": {
             "name": "Owner",
             "email": "user@example.com"

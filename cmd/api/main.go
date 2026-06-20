@@ -23,9 +23,9 @@ import (
 var commitSHA string
 var f = flag.String("f", "etc/config.yaml", "config file")
 
-// @title <app-name> API
+// @title <app-name>-<org-name> API
 // @version 1.0
-// @description This is the <app-name> API documentation.
+// @description
 // @contact.name Owner
 // @contact.email user@example.com
 // @host localhost:8080

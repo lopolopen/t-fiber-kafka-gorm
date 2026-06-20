@@ -1,10 +1,10 @@
-.PHONY: test swag wire run gen build name tidy proto push
+.PHONY: test swag wire debug clean run gen build name tidy proto push
 
 APP_NAME		:= <app-name>
 ORG_NAME		:= <org-name>
 IMAGE_BASE 		:= ${ORG_NAME}/${APP_NAME}
 REGISTRY   		:= docker.io
-CONTAINER_TOOL	:= docker
+CONTAINER_TOOL	:= podman
 GIT_SHORT_SHA 	:= $(shell git describe --always --dirty 2>/dev/null || echo "unknown")
 
 COMMA := ,
@@ -52,6 +52,16 @@ migrate-down:
 	${MIGRATE_CLI} -path ./db/migrations -database ${DATABASE} down
 
 env ?= local
+
+debug:
+	${CONTAINER_TOOL} compose up --no-build
+
+debug-build:
+	${CONTAINER_TOOL} compose up --build
+
+clean:
+	${CONTAINER_TOOL} compose down --volumes --remove-orphans
+	${CONTAINER_TOOL} image prune -f
 
 run:
 	go mod tidy

@@ -14,11 +14,15 @@ do_replace() {
     local pattern=$1
     local replacement=$2
     if [ "$OS" == "Darwin" ]; then
+        sed -i '' "s|$pattern|$replacement|g" cmd/api/main.go
         sed -i '' "s|$pattern|$replacement|g" README.md
         sed -i '' "s|$pattern|$replacement|g" Makefile
+        sed -i '' "s|$pattern|$replacement|g" .env
     else
+        sed -i "s|$pattern|$replacement|g" cmd/api/main.go
         sed -i "s|$pattern|$replacement|g" README.md
         sed -i "s|$pattern|$replacement|g" Makefile
+        sed -i "s|$pattern|$replacement|g" .env
     fi
 }
 
