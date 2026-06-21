@@ -25,8 +25,21 @@ func MustLoad(envName string, confFile string, v any) {
 		}
 	}
 
-	if err := k.Load(env.Provider("APP_", ".", func(key string) string {
-		return strings.ToLower(strings.TrimLeft(key, "APP_"))
+	if err := k.Load(env.ProviderWithValue("APP_", ".", func(key, value string) (string, any) {
+		if value == "" {
+			return "", nil
+		}
+		key = strings.ToLower(strings.TrimPrefix(key, "APP_"))
+		key = smartKey(key)
+		if strings.Contains(value, ",") {
+			parts := strings.Split(value, ",")
+			var sliceValues []string
+			for _, p := range parts {
+				sliceValues = append(sliceValues, strings.TrimSpace(p))
+			}
+			return key, sliceValues
+		}
+		return key, value
 	}), nil); err != nil {
 		panic(err)
 	}
@@ -39,8 +52,28 @@ func MustLoad(envName string, confFile string, v any) {
 }
 
 func withEnv(f string, ext string, env string) string {
-	if strings.HasPrefix(ext, ".") {
-		ext = strings.TrimLeft(ext, ".")
+	ext = strings.TrimPrefix(ext, ".")
+	return strings.TrimSuffix(f, ext) + fmt.Sprintf("%s.%s", env, ext)
+}
+
+func smartKey(input string) string {
+	var builder strings.Builder
+	builder.Grow(len(input))
+
+	runes := []rune(input)
+	n := len(runes)
+
+	for i := 0; i < n; i++ {
+		if runes[i] == '_' {
+			if i+1 < n && runes[i+1] == '_' {
+				builder.WriteRune('_')
+				i++
+			} else {
+				builder.WriteRune('.')
+			}
+		} else {
+			builder.WriteRune(runes[i])
+		}
 	}
-	return strings.TrimRight(f, ext) + fmt.Sprintf("%s.%s", env, ext)
+	return builder.String()
 }

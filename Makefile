@@ -51,8 +51,6 @@ migrate-up:
 migrate-down:	
 	${MIGRATE_CLI} -path ./db/migrations -database ${DATABASE} down
 
-env ?= local
-
 debug:
 	${CONTAINER_TOOL} compose up --no-build
 
@@ -62,6 +60,8 @@ debug-build:
 clean:
 	${CONTAINER_TOOL} compose down --volumes --remove-orphans
 	${CONTAINER_TOOL} image prune -f
+
+env ?= local
 
 run:
 	go mod tidy
