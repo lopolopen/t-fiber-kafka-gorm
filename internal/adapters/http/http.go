@@ -10,9 +10,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
-	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
+	"github.com/lopolopen/t-fiber-kafka-gorm/docs"
 	v1 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/handlers/v1"
-	tout "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/timeout"
+	timeout2 "github.com/lopolopen/t-fiber-kafka-gorm/internal/adapters/http/timeout"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/applic/service"
 
 	"github.com/gofiber/fiber/v2/middleware/timeout"
@@ -67,7 +67,7 @@ func NewApp(
 
 	users := apiv1.Group("/users")
 	users.Get("", v1.QueryUsers(userSvc))
-	users.Get("unsafe-timeout", tout.UnsafeTimeout(v1.QueryUsersWithUnsafeTimeout(userSvc), 1*time.Second))
+	users.Get("unsafe-timeout", timeout2.UnsafeTimeout(v1.QueryUsersWithUnsafeTimeout(userSvc), 1*time.Second))
 
 	if pub != nil {
 		gap.Subscribe(

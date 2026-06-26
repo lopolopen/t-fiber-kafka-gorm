@@ -14,7 +14,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/config"
-	_ "github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
+	_ "github.com/lopolopen/t-fiber-kafka-gorm/docs"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/confx"
 	"github.com/lopolopen/t-fiber-kafka-gorm/internal/pkg/x"
 	_ "go.uber.org/automaxprocs"

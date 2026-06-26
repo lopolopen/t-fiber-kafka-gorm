@@ -16,8 +16,8 @@ import (
 // @Param			key	query	string	true	"Search key for User name"
 // @Tags			User
 // @Produce		json
-// @Success		200	{object}	dto.Resp[[]result.User]
-// @Failure		200	{object}	dto.Resp[any]
+// @Success		200	{object}	dto.Resp{data=[]result.User}
+// @Failure		500	{object}	dto.Resp{data=nil}	"Internal Server Error"
 // @Router			/api/v1/users [get]
 func QueryUsers(svc *service.UserSvc) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -38,8 +38,7 @@ func QueryUsers(svc *service.UserSvc) fiber.Handler {
 // @Param			key	query	string	true	"Search key for User name"
 // @Tags			User
 // @Produce		json
-// @Success		200	{object}	dto.Resp[[]result.User]
-// @Failure		200	{object}	dto.Resp[any]
+// @Success		200	{object}	dto.Resp{data=[]result.User}
 // @Router			/api/v1/users/unsafe-timeout [get]
 func QueryUsersWithUnsafeTimeout(svc *service.UserSvc) fiber.Handler {
 	return func(c *fiber.Ctx) error {

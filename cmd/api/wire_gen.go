@@ -21,7 +21,7 @@ import (
 )
 
 import (
-	_ "github.com/lopolopen/t-fiber-kafka-gorm/cmd/api/docs"
+	_ "github.com/lopolopen/t-fiber-kafka-gorm/docs"
 	_ "go.uber.org/automaxprocs"
 )
 

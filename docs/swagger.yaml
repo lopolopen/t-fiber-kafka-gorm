@@ -1,25 +1,8 @@
 basePath: /
 definitions:
-  dto.Resp-any:
+  dto.Resp:
     properties:
       data: {}
-      error:
-        type: string
-      message:
-        type: string
-      metadata:
-        additionalProperties:
-          type: string
-        type: object
-      reason:
-        type: string
-    type: object
-  dto.Resp-array_result_User:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/result.User'
-        type: array
       error:
         type: string
       message:
@@ -66,7 +49,23 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.Resp-any'
+            allOf:
+            - $ref: '#/definitions/dto.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/result.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/dto.Resp'
+            - properties:
+                data:
+                  type: object
+              type: object
       summary: Query users.
       tags:
       - User
@@ -85,7 +84,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dto.Resp-any'
+            allOf:
+            - $ref: '#/definitions/dto.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/result.User'
+                  type: array
+              type: object
       summary: Query users. (Unsafe Timeout Demo)
       tags:
       - User
